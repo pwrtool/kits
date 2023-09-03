@@ -1,7 +1,7 @@
 #!/bin/bash
 
 tsc
-npm publish
+npm publish --access public
 
 
 rm *.js
