@@ -5,6 +5,7 @@
  * @license GPL-3.0
  */
 import * as rl from "readline";
+import os from "os";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -280,8 +281,67 @@ export function exitWithFailure() {
 export function exitWithSuccess() {
   process.exit(0);
 }
-
 /**
- * Gets the config object from the config file at ~/.powertool/config.yaml
+ * Turns the local .ptconfig.json and the global ~/.powertool/config.json into a single config object. Local values will be prioritized.
  */
-export function getConfigObject(): any {}
+export class Config {
+  private config: Map<string, any> = new Map<string, string>();
+
+  constructor() {
+    const globalConfig = path.join(os.homedir(), ".powertool", "config.json");
+    const globalConfigJson = require(globalConfig);
+    for (const key in globalConfigJson) {
+      this.config.set(key, globalConfigJson[key]);
+    }
+
+    const configPath = path.join(thisDir, ".ptconfig.json");
+    const config = require(configPath);
+    for (const key in config) {
+      this.config.set(key, config[key]);
+    }
+  }
+
+  /**
+   * Gets a value from the config. Throws an error if the value does not exist
+   * @param key - The name of the key to get
+   * @return - The value of the config key
+   */
+  public get(key: string): any {
+    const value = this.config.get(key);
+    if (!value) {
+      throw new Error(`Config key ${key} not found`);
+    }
+
+    return value;
+  }
+}
+/**
+ * A class that handles command line arguments. An example command would be:
+ * `pwrtool cooluser/kit tool property=value name=JonDoe`
+ */
+export class CliArgs {
+  private args: Map<string, string> = new Map<string, string>();
+
+  constructor() {
+    process.argv.forEach((arg) => {
+      const argParts = arg.split("=");
+      if (argParts.length === 2) {
+        this.args.set(argParts[0], argParts[1]);
+      }
+    });
+  }
+
+  /**
+   * Gets a value from the command line arguments. Throws an error if the value does not exist
+   * @param  key - The name of the key to get
+   * @return the value of the key
+   */
+  public get(key: string): string {
+    const value = this.args.get(key);
+    if (!value) {
+      throw new Error(`Argument ${key} not found`);
+    }
+
+    return value;
+  }
+}
