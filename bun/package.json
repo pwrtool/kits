@@ -1,9 +1,11 @@
 {
-  "name": ".",
+  "name": "@pwrtool/kit",
   "module": "index.ts",
   "type": "module",
+  "version": "1.0.0",
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "vitest": "^0.34.6"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
