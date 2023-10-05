@@ -3,11 +3,17 @@
   "module": "index.ts",
   "type": "module",
   "version": "1.0.0",
+  "scripts": {
+    "test": "vitest"
+  },
   "devDependencies": {
     "bun-types": "latest",
     "vitest": "^0.34.6"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@pwrtool/runstring": "^1.0.0"
   }
 }
