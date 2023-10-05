@@ -1,4 +1,4 @@
-import { Kit } from "../lib/kit";
+import { Kit, findRunstring, powertool } from "../lib/kit";
 
 describe("Kit", () => {
   it("can add tools", () => {
@@ -24,5 +24,44 @@ describe("Kit", () => {
   it("throws an error when running a tool that doesn't exist", () => {
     const kit = new Kit();
     expect(() => kit.runTool("test")).toThrow();
+  });
+});
+
+describe("powertool", () => {
+  it("creates a kit, adds tools to it, and runs it based on the runstring", () => {
+    const func = vi.fn();
+    powertool(
+      [
+        {
+          name: "test",
+          function: func,
+        },
+      ],
+      {
+        tool: "test",
+        from: "test",
+        arguments: new Map(),
+        autoAnswer: false,
+        answers: [],
+      }
+    );
+
+    expect(func).toBeCalled();
+  });
+});
+
+describe("getRunstring", () => {
+  it("gets the runstring from the command line arguments", () => {
+    process.argv = [
+      "",
+      "",
+      "tool:test;from:test;args:[];autoAnswer:f;answers:[]",
+    ];
+    const runstring = findRunstring();
+    expect(runstring.tool).toBe("test");
+  });
+  it("throws an error if no runstring is provided", () => {
+    process.argv = ["", ""];
+    expect(() => findRunstring()).toThrow();
   });
 });
