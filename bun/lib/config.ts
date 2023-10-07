@@ -18,6 +18,10 @@ export class Config {
     }
   }
 
+  exists(key: string): boolean {
+    return this.values.has(key);
+  }
+
   get(key: string): any {
     return this.values.get(key);
   }
