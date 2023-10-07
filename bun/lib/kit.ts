@@ -3,6 +3,9 @@
  * @author firesquid6 <me@jdeiss.com>
  * @license GPL-3.0
  */
+import { Config } from "./config";
+import { IO } from "./io";
+import { CLIArgs } from "./cli";
 import { parseRunstring, ParsedRunstring } from "@pwrtool/runstring";
 
 export interface Tool {
@@ -47,6 +50,11 @@ export function powertool(
   }
 
   kit.runTool(runstring.tool);
+  return {
+    IO: new IO(),
+    config: new Config(),
+    args: new CLIArgs(findRunstring()),
+  };
 }
 
 /**
@@ -54,7 +62,14 @@ export function powertool(
  */
 export function findRunstring(): ParsedRunstring {
   if (process.argv.length < 3) {
-    throw new Error("No runstring provided");
+    console.warn("No runstring provided");
+    return {
+      tool: "",
+      from: "",
+      arguments: new Map(),
+      autoAnswer: false,
+      answers: [],
+    };
   }
 
   const runstring = process.argv[2];
