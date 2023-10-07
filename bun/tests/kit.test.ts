@@ -60,8 +60,8 @@ describe("getRunstring", () => {
     const runstring = findRunstring();
     expect(runstring.tool).toBe("test");
   });
-  it("throws an error if no runstring is provided", () => {
+  it("returns empty if no runstring provided", () => {
     process.argv = ["", ""];
-    expect(() => findRunstring()).toThrow();
+    expect(findRunstring().tool).toBe("");
   });
 });
