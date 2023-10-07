@@ -4,9 +4,11 @@ import { ParsedRunstring } from "@pwrtool/runstring";
  */
 export class CLIArgs {
   private args: Map<string, string> = new Map();
+  private runDir: string = "";
 
   constructor(parsedRunstring: ParsedRunstring) {
     this.args = parsedRunstring.arguments;
+    this.runDir = parsedRunstring.from;
   }
 
   get(key: string): string | undefined {
@@ -29,5 +31,12 @@ export class CLIArgs {
     }
 
     return value;
+  }
+
+  /**
+   * Gets the run directory. If it is not provided, it returns the current working directory.
+   */
+  getRunDir(): string {
+    return this.runDir === "" ? process.cwd() : this.runDir;
   }
 }
