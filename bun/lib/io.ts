@@ -1,23 +1,17 @@
 import readline from "readline";
 
 export class IO {
-  static async prompt(question: string): Promise<string> {
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
+  private questioner: Questioner;
 
-    const answer = await new Promise<string>((resolve) => {
-      rl.question(`\x1b[37;1m${question}\x1b[0m`, (answer) => {
-        resolve(answer);
-      });
-    });
-
-    rl.close();
-    return answer;
+  constructor(questioner: Questioner) {
+    this.questioner = questioner;
   }
 
-  static async dichotomous(question: string): Promise<boolean> {
+  async prompt(question: string): Promise<string> {
+    return await this.questioner.prompt(question);
+  }
+
+  async dichotomous(question: string): Promise<boolean> {
     const rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
@@ -88,5 +82,60 @@ export class IO {
    */
   static error(message: string) {
     console.log("\x1b[31;1m%s\x1b[0m", message);
+  }
+}
+
+export abstract class Questioner {
+  abstract prompt(question: string): Promise<string>;
+  abstract dichotomous(question: string): Promise<boolean>;
+}
+
+export class ConsoleQuestioner extends Questioner {
+  async prompt(question: string): Promise<string> {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+
+    const answer = await new Promise<string>((resolve) => {
+      rl.question(`\x1b[37;1m${question}\x1b[0m`, (answer) => {
+        resolve(answer);
+      });
+    });
+
+    rl.close();
+    return answer;
+  }
+
+  async dichotomous(question: string): Promise<boolean> {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+
+    const answer = await new Promise<boolean>((resolve) => {
+      rl.question(`\x1b[37;1m${question}\x1b[0m`, (answer) => {
+        resolve(answer.toLowerCase() === "y");
+      });
+    });
+
+    rl.close();
+    return answer;
+  }
+}
+
+export class FakeQuestioner extends Questioner {
+  private answers: string[];
+  constructor(answers: string[]) {
+    super();
+    this.answers = answers;
+  }
+
+  async prompt(_question: string): Promise<string> {
+    return Promise.resolve(this.answers.shift() || "");
+  }
+
+  async dichotomous(_question: string): Promise<boolean> {
+    return Promise.resolve(this.answers.shift() === "y");
   }
 }

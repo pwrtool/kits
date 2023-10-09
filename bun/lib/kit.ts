@@ -4,7 +4,7 @@
  * @license GPL-3.0
  */
 import { Config } from "./config";
-import { IO } from "./io";
+import { IO, ConsoleQuestioner, FakeQuestioner, Questioner } from "./io";
 import { CLIArgs } from "./cli";
 import { parseRunstring, ParsedRunstring } from "@pwrtool/runstring";
 
@@ -38,7 +38,7 @@ export class Kit {
  */
 export function powertool(
   tools: Tool[],
-  runstring: ParsedRunstring | undefined = undefined
+  runstring: ParsedRunstring | undefined = undefined,
 ) {
   if (runstring === undefined) {
     runstring = findRunstring();
@@ -50,8 +50,17 @@ export function powertool(
   }
 
   kit.runTool(runstring.tool);
+
+  let questioner: Questioner;
+
+  if (runstring.autoAnswer) {
+    questioner = new FakeQuestioner(runstring.answers);
+  } else {
+    questioner = new ConsoleQuestioner();
+  }
+
   return {
-    IO: new IO(),
+    IO: new IO(questioner),
     config: new Config(),
     args: new CLIArgs(findRunstring()),
   };
