@@ -7,6 +7,7 @@ import { Config } from "./config";
 import { IO, ConsoleQuestioner, FakeQuestioner, Questioner } from "./io";
 import { CLIArgs } from "./cli";
 import { parseRunstring, ParsedRunstring } from "@pwrtool/runstring";
+import { FancyOut } from "@pwrtool/fancy-out";
 
 export interface Tool {
   name: string;
@@ -73,9 +74,8 @@ export function powertool(
  * Gets the runstring from the command line arguments and parses it. Throws an error if it fails
  */
 export function findRunstring(): ParsedRunstring {
-  console.log("I'm being run");
   if (process.argv.length < 4) {
-    console.warn("No runstring provided");
+    FancyOut.warn("⚠ No runstring provided");
     return {
       tool: "",
       from: "",

@@ -1,6 +1,7 @@
 import os from "node:os";
 import path from "node:path";
 import fs from "node:fs";
+import { FancyOut } from "@pwrtool/fancy-out";
 
 export class Config {
   private values = new Map<string, any>();
@@ -14,7 +15,7 @@ export class Config {
         this.values.set(key, config[key]);
       }
     } catch (e) {
-      console.warn("Config file was not found or failed to be parsed");
+      FancyOut.warn("⚠ Config file was not found or failed to be parsed\n");
     }
   }
 
