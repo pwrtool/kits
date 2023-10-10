@@ -24,6 +24,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@pwrtool/fancy-out": "^1.0.0",
     "@pwrtool/runstring": "^1.0.0"
   }
 }

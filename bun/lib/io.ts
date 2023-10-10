@@ -1,4 +1,5 @@
 import readline from "readline";
+import { FancyOut } from "@pwrtool/fancy-out";
 
 export class IO {
   private questioner: Questioner;
@@ -36,7 +37,7 @@ export class IO {
    * @return void
    */
   out(message: string) {
-    console.log(message);
+    FancyOut.out(message);
   }
 
   /**
@@ -45,7 +46,7 @@ export class IO {
    * @return void
    */
   success(message: string) {
-    console.log("\x1b[32;1m%s\x1b[0m", message);
+    FancyOut.success(message);
   }
 
   /**
@@ -54,7 +55,7 @@ export class IO {
    * @return void
    */
   bold(message: string) {
-    console.log("\x1b[37;1m%s\x1b[0m", message);
+    FancyOut.bold(message);
   }
 
   /**
@@ -63,7 +64,7 @@ export class IO {
    * @return void
    */
   warn(message: string) {
-    console.log("\x1b[33;1m%s\x1b[0m", message);
+    FancyOut.warn(message);
   }
 
   /**
@@ -72,7 +73,7 @@ export class IO {
    * @return void
    */
   header(message: string) {
-    console.log("\x1b[34;1;4m%s\x1b[0m", message);
+    FancyOut.header(message);
   }
 
   /**
@@ -81,7 +82,7 @@ export class IO {
    * @return void
    */
   error(message: string) {
-    console.log("\x1b[31;1m%s\x1b[0m", message);
+    FancyOut.error(message);
   }
 }
 

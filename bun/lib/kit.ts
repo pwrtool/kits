@@ -60,29 +60,20 @@ export function powertool(
     questioner = new ConsoleQuestioner();
   }
 
-  const kit = new Kit(
-    new IO(questioner),
-    new Config(),
-    new CLIArgs(findRunstring()),
-  );
+  const kit = new Kit(new IO(questioner), new Config(), new CLIArgs(runstring));
 
   for (const tool of tools) {
     kit.addTool(tool);
   }
 
   kit.runTool(runstring.tool);
-
-  return {
-    IO: new IO(questioner),
-    config: new Config(),
-    args: new CLIArgs(findRunstring()),
-  };
 }
 
 /**
  * Gets the runstring from the command line arguments and parses it. Throws an error if it fails
  */
 export function findRunstring(): ParsedRunstring {
+  console.log("I'm being run");
   if (process.argv.length < 4) {
     console.warn("No runstring provided");
     return {

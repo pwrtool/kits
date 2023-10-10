@@ -14,7 +14,7 @@ export class Config {
         this.values.set(key, config[key]);
       }
     } catch (e) {
-      console.log("Config file was not found or failed to be parsed");
+      console.warn("Config file was not found or failed to be parsed");
     }
   }
 
