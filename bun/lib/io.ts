@@ -35,7 +35,7 @@ export class IO {
    * @param message - The message to output
    * @return void
    */
-  static out(message: string) {
+  out(message: string) {
     console.log(message);
   }
 
@@ -44,7 +44,7 @@ export class IO {
    * @param message - The message to output
    * @return void
    */
-  static success(message: string) {
+  success(message: string) {
     console.log("\x1b[32;1m%s\x1b[0m", message);
   }
 
@@ -53,7 +53,7 @@ export class IO {
    * @param message - The message to output
    * @return void
    */
-  static bold(message: string) {
+  bold(message: string) {
     console.log("\x1b[37;1m%s\x1b[0m", message);
   }
 
@@ -62,7 +62,7 @@ export class IO {
    * @param message - The message to output
    * @return void
    */
-  static warn(message: string) {
+  warn(message: string) {
     console.log("\x1b[33;1m%s\x1b[0m", message);
   }
 
@@ -71,7 +71,7 @@ export class IO {
    * @param message - The message to output
    * @return void
    */
-  static header(message: string) {
+  header(message: string) {
     console.log("\x1b[34;1;4m%s\x1b[0m", message);
   }
 
@@ -80,7 +80,7 @@ export class IO {
    * @param message - The message to output
    * @return void
    */
-  static error(message: string) {
+  error(message: string) {
     console.log("\x1b[31;1m%s\x1b[0m", message);
   }
 }

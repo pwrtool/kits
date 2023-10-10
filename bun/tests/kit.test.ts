@@ -1,8 +1,21 @@
 import { Kit, findRunstring, powertool } from "../lib/kit";
+import { IO, ConsoleQuestioner } from "../lib/io";
+import { Config } from "../lib/config";
+import { CLIArgs } from "../lib/cli";
+
+const io = new IO(new ConsoleQuestioner());
+const config = new Config();
+const args = new CLIArgs({
+  tool: "test",
+  from: "test",
+  arguments: new Map(),
+  autoAnswer: false,
+  answers: [],
+});
 
 describe("Kit", () => {
   it("can add tools", () => {
-    const kit = new Kit();
+    const kit = new Kit(io, config, args);
     kit.addTool({
       name: "test",
       function: async () => {},
@@ -12,7 +25,7 @@ describe("Kit", () => {
 
   it("can run tools", () => {
     const func = vi.fn();
-    const kit = new Kit();
+    const kit = new Kit(io, config, args);
     kit.addTool({
       name: "test",
       function: func,
@@ -22,7 +35,7 @@ describe("Kit", () => {
     expect(func).toBeCalled();
   });
   it("throws an error when running a tool that doesn't exist", () => {
-    const kit = new Kit();
+    const kit = new Kit(io, config, args);
     expect(() => kit.runTool("test")).toThrow();
   });
 });
@@ -43,7 +56,7 @@ describe("powertool", () => {
         arguments: new Map(),
         autoAnswer: false,
         answers: [],
-      }
+      },
     );
 
     expect(func).toBeCalled();
@@ -53,6 +66,7 @@ describe("powertool", () => {
 describe("getRunstring", () => {
   it("gets the runstring from the command line arguments", () => {
     process.argv = [
+      "",
       "",
       "",
       "tool:test;from:test;args:[];autoAnswer:f;answers:[]",

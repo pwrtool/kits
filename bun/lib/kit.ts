@@ -10,13 +10,22 @@ import { parseRunstring, ParsedRunstring } from "@pwrtool/runstring";
 
 export interface Tool {
   name: string;
-  function: () => Promise<void>;
+  function: (IO: IO, config: Config, args: CLIArgs) => Promise<void>;
 }
 /**
  * handles adding and running tools. Everything does what you'd think.
  */
 export class Kit {
   tools: Tool[] = [];
+  private IO: IO;
+  private config: Config;
+  private args: CLIArgs;
+
+  constructor(IO: IO, config: Config, args: CLIArgs) {
+    this.IO = IO;
+    this.config = config;
+    this.args = args;
+  }
 
   addTool(tool: Tool) {
     this.tools.push(tool);
@@ -28,7 +37,7 @@ export class Kit {
       throw new Error(`Tool ${toolName} not found`);
     }
 
-    tool.function();
+    tool.function(this.IO, this.config, this.args);
   }
 }
 /**
@@ -43,14 +52,6 @@ export function powertool(
   if (runstring === undefined) {
     runstring = findRunstring();
   }
-
-  const kit = new Kit();
-  for (const tool of tools) {
-    kit.addTool(tool);
-  }
-
-  kit.runTool(runstring.tool);
-
   let questioner: Questioner;
 
   if (runstring.autoAnswer) {
@@ -58,6 +59,18 @@ export function powertool(
   } else {
     questioner = new ConsoleQuestioner();
   }
+
+  const kit = new Kit(
+    new IO(questioner),
+    new Config(),
+    new CLIArgs(findRunstring()),
+  );
+
+  for (const tool of tools) {
+    kit.addTool(tool);
+  }
+
+  kit.runTool(runstring.tool);
 
   return {
     IO: new IO(questioner),
@@ -70,7 +83,7 @@ export function powertool(
  * Gets the runstring from the command line arguments and parses it. Throws an error if it fails
  */
 export function findRunstring(): ParsedRunstring {
-  if (process.argv.length < 3) {
+  if (process.argv.length < 4) {
     console.warn("No runstring provided");
     return {
       tool: "",
@@ -81,6 +94,6 @@ export function findRunstring(): ParsedRunstring {
     };
   }
 
-  const runstring = process.argv[2];
+  const runstring = process.argv[3];
   return parseRunstring(runstring);
 }
