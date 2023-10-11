@@ -11,8 +11,9 @@ import { FancyOut } from "@pwrtool/fancy-out";
 
 export interface Tool {
   name: string;
-  function: (IO: IO, config: Config, args: CLIArgs) => Promise<void>;
+  function: (IO: IO, config: Config, args: CLIArgs) => Promise<void | object>;
 }
+
 /**
  * handles adding and running tools. Everything does what you'd think.
  */
