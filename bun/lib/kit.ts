@@ -34,6 +34,10 @@ export class Kit {
   }
 
   runTool(toolName: string) {
+    if (toolName === "") {
+      toolName = "default";
+    }
+
     const tool = this.tools.find((tool) => tool.name === toolName);
     if (tool === undefined) {
       throw new Error(`Tool ${toolName} not found`);

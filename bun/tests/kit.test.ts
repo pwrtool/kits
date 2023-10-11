@@ -18,7 +18,7 @@ describe("Kit", () => {
     const kit = new Kit(io, config, args);
     kit.addTool({
       name: "test",
-      function: async () => {},
+      function: async () => { },
     });
     expect(kit.tools.length).toBe(1);
   });
@@ -34,6 +34,30 @@ describe("Kit", () => {
     kit.runTool("test");
     expect(func).toBeCalled();
   });
+
+  it("runs the default tool if no tool is specified", () => {
+    const kit = new Kit(
+      io,
+      config,
+      new CLIArgs({
+        tool: "",
+        from: "test",
+        arguments: new Map(),
+        autoAnswer: false,
+        answers: [],
+      }),
+    );
+
+    const func = vi.fn();
+    kit.addTool({
+      name: "default",
+      function: func,
+    });
+
+    kit.runTool("");
+    expect(func).toBeCalled();
+  });
+
   it("throws an error when running a tool that doesn't exist", () => {
     const kit = new Kit(io, config, args);
     expect(() => kit.runTool("test")).toThrow();
