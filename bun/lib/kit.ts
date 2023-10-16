@@ -11,7 +11,7 @@ import { FancyOut } from "@pwrtool/fancy-out";
 
 export interface Tool {
   name: string;
-  function: (IO: IO, config: Config, args: CLIArgs) => Promise<void | object>;
+  function: (IO: IO, args: CLIArgs) => Promise<void | object>;
 }
 
 /**
@@ -20,12 +20,12 @@ export interface Tool {
 export class Kit {
   tools: Tool[] = [];
   private IO: IO;
-  private config: Config;
+  //private config: Config;
   private args: CLIArgs;
 
-  constructor(IO: IO, config: Config, args: CLIArgs) {
+  constructor(IO: IO, args: CLIArgs) {
     this.IO = IO;
-    this.config = config;
+    //this.config = config;
     this.args = args;
   }
 
@@ -43,13 +43,13 @@ export class Kit {
       throw new Error(`Tool ${toolName} not found`);
     }
 
-    tool.function(this.IO, this.config, this.args);
+    tool.function(this.IO, this.args);
   }
 }
 /**
  * Creates a kit, adds tools to it, and runs it based on the runstring.
  * @param tools An array of tools to add to the kit.
- * @param runstring The runstring to run the kit with.
+ * @param runstring The runstring to run the kit with. Finds the runstring from cli args if not provided
  */
 export function powertool(
   tools: Tool[],
@@ -66,7 +66,7 @@ export function powertool(
     questioner = new ConsoleQuestioner();
   }
 
-  const kit = new Kit(new IO(questioner), new Config(), new CLIArgs(runstring));
+  const kit = new Kit(new IO(questioner), new CLIArgs(runstring));
 
   for (const tool of tools) {
     kit.addTool(tool);
@@ -79,17 +79,27 @@ export function powertool(
  * Gets the runstring from the command line arguments and parses it. Throws an error if it fails
  */
 export function findRunstring(): ParsedRunstring {
-  if (process.argv.length < 4) {
-    FancyOut.warn("⚠ No runstring provided");
-    return {
-      tool: "",
-      from: "",
-      arguments: new Map(),
-      autoAnswer: false,
-      answers: [],
-    };
+  for (let i = 0; i < process.argv.length; i++) {
+    const arg = process.argv[i];
+    if (
+      arg.includes("args:") &&
+      arg.includes("tool:") &&
+      arg.includes("from:") &&
+      arg.includes(";") &&
+      arg.includes("autoAnswer:") &&
+      arg.includes("answers:")
+    ) {
+      return parseRunstring(arg);
+    }
   }
 
-  const runstring = process.argv[3];
-  return parseRunstring(runstring);
+  FancyOut.error("No runstring was provided. The args were: ");
+  console.log(process.argv);
+  return {
+    tool: "default",
+    from: "",
+    arguments: new Map(),
+    autoAnswer: false,
+    answers: [],
+  };
 }

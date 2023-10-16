@@ -18,7 +18,7 @@ describe("Kit", () => {
     const kit = new Kit(io, config, args);
     kit.addTool({
       name: "test",
-      function: async () => { },
+      function: async () => {},
     });
     expect(kit.tools.length).toBe(1);
   });
@@ -90,16 +90,27 @@ describe("powertool", () => {
 describe("getRunstring", () => {
   it("gets the runstring from the command line arguments", () => {
     process.argv = [
-      "",
-      "",
-      "",
-      "tool:test;from:test;args:[];autoAnswer:f;answers:[]",
+      "/home/firesquid/.bun/bin/bun",
+      "/home/firesquid/.powertool/kits/bench>test/index.ts",
+      "tool:test;from:/home/firesquid/source/std;args:[];autoAnswer:f;answers:[]",
     ];
     const runstring = findRunstring();
     expect(runstring.tool).toBe("test");
   });
+  it("gets the runstring even with random extra stuff", () => {
+    process.argv = [
+      "/home/firesquid/.bun/bin/bun",
+      "/home/firesquid/.powertool/kits/bench>test/index.ts",
+      "why am I here",
+      "tool:test;from:/home/firesquid/source/std;args:[];autoAnswer:f;answers:[]",
+    ];
+
+    const runstring = findRunstring();
+    expect(runstring.tool).toBe("test");
+  });
+
   it("returns empty if no runstring provided", () => {
     process.argv = ["", ""];
-    expect(findRunstring().tool).toBe("");
+    expect(findRunstring().tool).toBe("default");
   });
 });

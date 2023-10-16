@@ -3,6 +3,8 @@ import path from "node:path";
 import fs from "node:fs";
 import { FancyOut } from "@pwrtool/fancy-out";
 
+// I am not used right now!
+// Expect to see me in the v2.0 relase
 export class Config {
   private values = new Map<string, any>();
 
