@@ -1,3 +1,5 @@
 tests/
 node_modules/
 example/
+test.setup.ts
+vitest.config.ts
