@@ -50,12 +50,20 @@ export class IO {
   }
 
   /**
-   * Outputs a message to the console in blue and bold text
+   * Outputs a message to the console in bold text
    * @param message - The message to output
    * @return void
    */
   bold(message: string) {
     FancyOut.bold(message);
+  }
+
+  underlined(message: string) {
+    FancyOut.underlined(message);
+  }
+
+  info(message: string) {
+    FancyOut.info(message);
   }
 
   /**
