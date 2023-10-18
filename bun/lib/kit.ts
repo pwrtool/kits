@@ -8,6 +8,8 @@ import { IO, ConsoleQuestioner, FakeQuestioner, Questioner } from "./io";
 import { CLIArgs } from "./cli";
 import { parseRunstring, ParsedRunstring } from "@pwrtool/runstring";
 import { FancyOut } from "@pwrtool/fancy-out";
+const allowedCharacters =
+  "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_";
 
 export interface Tool {
   name: string;
@@ -30,6 +32,17 @@ export class Kit {
   }
 
   addTool(tool: Tool) {
+    for (let i = 0; i < tool.name.length; i++) {
+      if (!allowedCharacters.includes(tool.name[i])) {
+        FancyOut.error(`Tool name ${tool.name} contains invalid character`);
+        FancyOut.out(
+          "Allowed characters are: " + allowedCharacters.split("").join(", "),
+        );
+
+        process.exit(1);
+      }
+    }
+
     this.tools.push(tool);
   }
 
