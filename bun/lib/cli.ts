@@ -34,6 +34,17 @@ export class CLIArgs {
   }
 
   /**
+   * Gets a value. If that value is not found, it returns the default value.
+   * @param The name of the argument to get
+   * @param The default value to return if the argument is not found
+   * @return The value of the argument, or the default value if the argument is not found
+   */
+  getOrDefault(key: string, defaultValue: string) {
+    const value = this.get(key);
+    return value === undefined ? defaultValue : value;
+  }
+
+  /**
    * Gets the run directory. If it is not provided, it returns the current working directory.
    */
   getRunDir(): string {
