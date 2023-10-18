@@ -1,5 +1,6 @@
 import readline from "readline";
 import { FancyOut } from "@pwrtool/fancy-out";
+import { outputToScratch } from "./scratch";
 
 export class IO {
   private questioner: Questioner;
@@ -26,6 +27,10 @@ export class IO {
 
     rl.close();
     return answer;
+  }
+
+  outToScratch(data: object) {
+    outputToScratch(data);
   }
 
   // This article was very helpful:
