@@ -1,6 +1,6 @@
 import readline from "readline";
 import { FancyOut } from "@pwrtool/fancy-out";
-import { outputToScratch } from "./scratch";
+import outputToScratch from "./scratch";
 
 export class IO {
   private questioner: Questioner;
