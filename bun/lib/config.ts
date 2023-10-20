@@ -2,22 +2,33 @@ import os from "node:os";
 import path from "node:path";
 import fs from "node:fs";
 import { FancyOut } from "@pwrtool/fancy-out";
+import YAML from "yaml";
 
 // I am not used right now!
 // Expect to see me in the v2.0 relase
 export class Config {
   private values = new Map<string, any>();
 
-  constructor() {
+  constructor(cwd: string) {
     try {
       const configString = fs.readFileSync(getConfigPath(), "utf-8");
-      const config = JSON.parse(configString);
+      const config = YAML.parse(configString);
 
       for (const key in config) {
         this.values.set(key, config[key]);
       }
     } catch (e) {
       FancyOut.warn("⚠ Config file was not found or failed to be parsed\n");
+    }
+
+
+    if fs.fileExistsSync(path.join(cwd, "ptconfig.yaml")) {
+      const configString = fs.readFileSync(path.join(cwd, "ptconfig.yaml"), "utf-8");
+      const config = YAML.parse(configString);
+      
+      for (const key in config) {
+        this.values.set(key, config[key]);
+      }
     }
   }
 
@@ -29,10 +40,6 @@ export class Config {
     return this.values.get(key);
   }
 
-  set(key: string, value: any) {
-    this.values.set(key, value);
-  }
-
   getOrThrow(key: string): any {
     const value = this.values.get(key);
     if (value === undefined) {
@@ -41,8 +48,17 @@ export class Config {
 
     return value;
   }
+
+  getOrDefault(key: string, defaultValue: string) {
+    const value = this.values.get(key);
+    if (value === undefined) {
+      return defaultValue;
+    }
+    return value;
+  }
 }
 
 export function getConfigPath() {
-  return path.join(os.homedir(), ".config", "pwrtool", "config.json");
+  return path.join(os.homedir(), ".config", "pwrtool", "config.yaml");
 }
+
