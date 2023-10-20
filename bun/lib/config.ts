@@ -4,8 +4,6 @@ import fs from "node:fs";
 import { FancyOut } from "@pwrtool/fancy-out";
 import YAML from "yaml";
 
-// I am not used right now!
-// Expect to see me in the v2.0 relase
 export class Config {
   private values = new Map<string, any>();
 
@@ -21,11 +19,13 @@ export class Config {
       FancyOut.warn("⚠ Config file was not found or failed to be parsed\n");
     }
 
-
-    if fs.fileExistsSync(path.join(cwd, "ptconfig.yaml")) {
-      const configString = fs.readFileSync(path.join(cwd, "ptconfig.yaml"), "utf-8");
+    if (fs.existsSync(path.join(cwd, "ptconfig.yaml"))) {
+      const configString = fs.readFileSync(
+        path.join(cwd, "ptconfig.yaml"),
+        "utf-8",
+      );
       const config = YAML.parse(configString);
-      
+
       for (const key in config) {
         this.values.set(key, config[key]);
       }
@@ -61,4 +61,3 @@ export class Config {
 export function getConfigPath() {
   return path.join(os.homedir(), ".config", "pwrtool", "config.yaml");
 }
-

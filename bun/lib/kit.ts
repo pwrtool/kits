@@ -13,7 +13,7 @@ const allowedCharacters =
 
 export interface Tool {
   name: string;
-  function: (IO: IO, args: CLIArgs) => Promise<void | object>;
+  function: (IO: IO, args: CLIArgs, config: Config) => Promise<void | object>;
 }
 
 /**
@@ -22,12 +22,12 @@ export interface Tool {
 export class Kit {
   tools: Tool[] = [];
   private IO: IO;
-  //private config: Config;
+  private config: Config;
   private args: CLIArgs;
 
-  constructor(IO: IO, args: CLIArgs) {
+  constructor(IO: IO, args: CLIArgs, config: Config) {
     this.IO = IO;
-    //this.config = config;
+    this.config = config;
     this.args = args;
   }
 
@@ -56,7 +56,7 @@ export class Kit {
       throw new Error(`Tool ${toolName} not found`);
     }
 
-    tool.function(this.IO, this.args);
+    tool.function(this.IO, this.args, this.config);
   }
 }
 /**
@@ -79,7 +79,11 @@ export function powertool(
     questioner = new ConsoleQuestioner();
   }
 
-  const kit = new Kit(new IO(questioner), new CLIArgs(runstring));
+  const kit = new Kit(
+    new IO(questioner),
+    new CLIArgs(runstring),
+    new Config(runstring.from),
+  );
 
   for (const tool of tools) {
     kit.addTool(tool);
