@@ -59,5 +59,5 @@ export class Config {
 }
 
 export function getConfigPath() {
-  return path.join(os.homedir(), ".config", "pwrtool", "config.yaml");
+  return path.join(os.homedir(), ".config", "powertool", "config.yaml");
 }
