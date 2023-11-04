@@ -3,3 +3,4 @@ node_modules/
 example/
 test.setup.ts
 vitest.config.ts
+__docs__

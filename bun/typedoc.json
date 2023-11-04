@@ -1,0 +1,11 @@
+{
+  "entryPoints": [
+    "lib/cli.ts",
+    "lib/config.ts",
+    "lib/io.ts",
+    "lib/kit.ts",
+    "lib/scratch.ts",
+    "index.ts"
+  ],
+  "out": "__docs__"
+}
