@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@pwrtool/fancy-out": "^1.0.0",
-    "@pwrtool/runstring": "^1.0.0",
+    "@pwrtool/runstring": "^2.0.0",
     "yaml": "^2.3.3"
   }
 }
