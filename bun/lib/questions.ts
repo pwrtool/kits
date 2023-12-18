@@ -38,7 +38,7 @@ function mockIO(answers: string[]): IO {
     err: (message: string) => {
       console.log(`\x1b[31mERROR: ${message}`);
     },
-    ask: async (question: string) => {
+    ask: async () => {
       if (mock.answers.length === 0) {
         throw new Error("No more provided mock questions");
       }
