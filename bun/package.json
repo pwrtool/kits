@@ -1,6 +1,7 @@
 {
   "name": "@pwrtool/bun-kit",
   "module": "index.ts",
+  "version": "1.0.0",
   "type": "module",
   "devDependencies": {
     "bun-types": "latest"
